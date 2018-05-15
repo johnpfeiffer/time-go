@@ -1,0 +1,13 @@
+language: go
+script: go get && go test -v
+notifications:
+  email: false
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: Wnk7XAhPGy+S0mJ9SdrncxTfYq4dxWfkhJMrVsBydrmGjG+VXUMIb94pB7AzkgJCqJVgb6QCSkqiLqy45OiuILS2Wt7G8BvauQl/JdY7uOHiQcKLfyoBdlYgMgrCPUqT8W0Rd1E3PcFF4bh2126xnHHnM/aABpfqlRj5PqycOFuhwJ7871k6k/JJD3J4N+B3h+pMDWq5zEcaMGBR7MF+AkRV8vJN+2Qcub/6q7L6Ickn5uLd67r3kp71jOkoaHeYiZrga3KIf/lzRb9H6B+S/wpyjS5NBmphqEB1WVSuEoVM0qGHaqncgXsR8CRcaXaUDERub88LnabxY/UeM7WLJnKUkMkSaGVMS1r/arxU5my0iSnojFZBGhoB1yaLXZscizJill5Ej68m/s4MphqUvH/ew6RMYykdbCKiVR6TPFBsx829h0cDk2hl2gwo2KQV2sJw1cIYr/+QQakLUAZJBtQB9JNcEBlkqbdt2aWRnnS58c/GZj3po9McdszimBSdFHgmNIaXv7jLEOIQF0cola2ivP5RbdtilbHUSchw70BcUcGuhXmSzkgEQw8ue+Wc2e60ZaxIQYUUUWxlGI92p9K9TgVt+km9NINm/7XsIr45cOBP0jj8FpXKIskTIjU43rIjnQWGdCw/1hVq9kldXjNf+kpzSeFOAgDTRltJk4M=
+  app: time-go
+  on:
+    repo: johnpfeiffer/time-go
+
