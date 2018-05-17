@@ -12,6 +12,8 @@ import (
 func router() *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/robots.txt", RobotsHandler).Methods("GET")
+	r.HandleFunc("/time/epoch", EpochHandler).Methods("GET")
+	r.HandleFunc("/time", TimeHandler).Methods("GET")
 	r.HandleFunc("/", IndexHandler).Methods("GET")
 	return r
 }
