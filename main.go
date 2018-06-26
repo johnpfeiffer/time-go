@@ -9,18 +9,24 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func router() *mux.Router {
+func router(weatherKey string) *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/robots.txt", RobotsHandler).Methods("GET")
+	r.HandleFunc("/weather",
+		func(w http.ResponseWriter, r *http.Request) {
+			WeatherHandler(w, r, weatherKey)
+		}).Methods("GET")
+
 	r.HandleFunc("/time/epoch", EpochHandler).Methods("GET")
 	r.HandleFunc("/time", TimeHandler).Methods("GET")
+	r.HandleFunc("/robots.txt", RobotsHandler).Methods("GET")
 	r.HandleFunc("/", IndexHandler).Methods("GET")
 	return r
 }
 
 func main() {
 	port := getEnvOrDefault("PORT", "8080")
-	r := router()
+	weatherKey := getEnvOrDefault("WEATHERKEY", "")
+	r := router(weatherKey)
 	http.Handle("/", r)
 	loggedRouter := handlers.LoggingHandler(os.Stdout, r)
 	log.Println("Listening on port", port)
