@@ -1,0 +1,34 @@
+{{define "style"}}
+th {
+  padding: 5px;
+  text-align: center;  
+}
+td {
+  border-bottom: 2px solid darkblue;
+  padding: 5px;
+  text-align: center;
+}
+{{end}}
+
+
+{{define "content"}}
+
+<table style='font-family:"monospace"; font-size:120%; border-collapse: collapse'>
+  <tr>
+    <th>Time</th><th>English</th><th>Metric</th><th>Condition</th><th>Wind</th><th>Humidity</th>
+  </tr>
+    {{range .HourlyForecast}}
+    <tr>
+      <td>{{.ForecastTimestamp.Hour}}</td>
+      <td><b>{{.ForecastTemperature.Fahrenheit}}</b></td>
+      <td>{{.ForecastTemperature.Celsuis}}</td>
+      <td>{{.ForecastCondition}}</td>
+      <td>{{.Windspeed.MilesPerHour}} mph</td>
+      <td>{{.Humidity}} %</td>
+    </tr>
+    {{end}}
+  </table>
+{{end}}
+
+<!--
+<table style='font-family:"Courier New", Courier, monospace; font-size:80%'-->

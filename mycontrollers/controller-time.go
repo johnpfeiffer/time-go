@@ -1,4 +1,4 @@
-package main
+package mycontrollers
 
 import (
 	"fmt"
@@ -23,7 +23,7 @@ func TimeHandler(w http.ResponseWriter, r *http.Request) {
 	secondsEastOfUTC := int((8 * time.Hour).Seconds())
 	china := time.FixedZone("China Standard Time", secondsEastOfUTC)
 	regionalTime := t.In(china)
-	output = output + "\n" + "China Standard Time , " + regionalTime.Format(time.RFC3339)
+	output = output + "\n" + "China Standard Time , " + regionalTime.Format(time.RFC3339) + "\n"
 
 	// TODO: // https://en.wikipedia.org/wiki/Daylight_saving_time_by_country
 

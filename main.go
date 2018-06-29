@@ -7,19 +7,21 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/johnpfeiffer/time-go/mycontrollers"
+	"github.com/johnpfeiffer/time-go/weather"
 )
 
 func router(weatherKey string) *mux.Router {
 	r := mux.NewRouter()
 	r.HandleFunc("/weather",
 		func(w http.ResponseWriter, r *http.Request) {
-			WeatherHandler(w, r, weatherKey)
+			weather.Controller(w, r, weatherKey)
 		}).Methods("GET")
 
-	r.HandleFunc("/time/epoch", EpochHandler).Methods("GET")
-	r.HandleFunc("/time", TimeHandler).Methods("GET")
-	r.HandleFunc("/robots.txt", RobotsHandler).Methods("GET")
-	r.HandleFunc("/", IndexHandler).Methods("GET")
+	r.HandleFunc("/time/epoch", mycontrollers.EpochHandler).Methods("GET")
+	r.HandleFunc("/time", mycontrollers.TimeHandler).Methods("GET")
+	r.HandleFunc("/robots.txt", mycontrollers.RobotsHandler).Methods("GET")
+	r.HandleFunc("/", mycontrollers.IndexHandler).Methods("GET")
 	return r
 }
 

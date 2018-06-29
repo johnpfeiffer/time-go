@@ -1,8 +1,7 @@
-package main
+package weather
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -17,11 +16,15 @@ type WeatherResponse struct {
 type HourForecast struct {
 	ForecastTimestamp   `json:"FCTTIME"`
 	ForecastTemperature `json:"temp"`
+	ForecastCondition   string `json:"condition"`
+	Windspeed           `json:"wspd"`
+	Humidity            string `json:"humidity"`
 }
 
 // ForecastTimestamp is the time
 type ForecastTimestamp struct {
 	Epoch string `json:"epoch"`
+	Hour  string `json:"hour"`
 }
 
 // ForecastTemperature contains the temperature in both english and metric units
@@ -30,28 +33,10 @@ type ForecastTemperature struct {
 	Celsuis    string `json:"metric"`
 }
 
-// WeatherHandler returns the weather for a city
-func WeatherHandler(w http.ResponseWriter, r *http.Request, apiKey string) {
-
-	// TODO: totally unsafe for XSS etc.
-	// 	vars := mux.Vars(r)
-	// fmt.Fprintf(w, "you have requested notes from date: %v\n", vars["date"])
-
-	weatherForecast, err := getWeatherResponse(apiKey, "CA/San_Francisco")
-	if err != nil {
-		fmt.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	// TODO: table of results in a template
-	theJSON, err := json.MarshalIndent(weatherForecast, "", "  ")
-	if err != nil {
-		fmt.Println(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	fmt.Fprintf(w, string(theJSON))
+// Windspeed contains the speed in both english and metric units
+type Windspeed struct {
+	MilesPerHour      string `json:"english"`
+	KilometersPerHour string `json:"metric"`
 }
 
 // getWeatherResponse uses the APIs peculiar city locations https://api.wunderground.com/weather/api/d/docs
