@@ -1,6 +1,7 @@
 package paginator
 
 import (
+	"html"
 	"strconv"
 	"strings"
 )
@@ -16,9 +17,7 @@ type Book struct {
 // generateHTMLChapters
 func generateHTMLChapters(text string) (Book, error) {
 	b := Book{Chapters: []string{}}
-	// TODO: proper parser to break into chunks
-	chapterSplit := "CHAPTER "
-	parts := strings.Split(text, chapterSplit)
+	chapterSplit, parts := findChapters(text)
 	for i, original := range parts {
 		var chapterHeader string
 		if i == 0 {
@@ -29,8 +28,20 @@ func generateHTMLChapters(text string) (Book, error) {
 			// TODO: use original chapter numbers
 			chapterHeader = `<h3 id="` + strings.TrimSpace(chapterSplit) + chapterNumber + `">` + chapterSplit + chapterNumber + `</h3>`
 		}
-		converted := strings.Replace(original, "\\n", "<br />", -1)
+		converted := html.EscapeString(original)
+		converted = strings.Replace(converted, "\\n", "<br />", -1)
 		b.Chapters = append(b.Chapters, chapterHeader+converted)
 	}
 	return b, nil
+}
+
+func findChapters(text string) (string, []string) {
+	chapterSplit := "CHAPTER "
+	parts := strings.Split(text, chapterSplit)
+	return chapterSplit, parts
+}
+
+func toHTMLPage(b Book) string {
+	s := `<html>` + strings.Join(b.Chapters, "<hr>\n") + `</html>`
+	return s
 }

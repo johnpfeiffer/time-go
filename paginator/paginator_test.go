@@ -4,18 +4,16 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
-	"strings"
 	"testing"
 )
 
 func TestManual(t *testing.T) {
 	input := ""
 	for i := 1; i < 12; i++ {
-		input += `CHAPTER ` + strconv.Itoa(i) + `\nfoobar\n\n`
+		input += `CHAPTER ` + strconv.Itoa(i) + `\nfoobar <this@example> \n\n`
 	}
 	b, _ := generateHTMLChapters(input)
-	s := `<html>` + strings.Join(b.Chapters, "<hr>\n") + `</html>`
-	fmt.Println(s)
+	fmt.Println(toHTMLPage(b))
 }
 
 func TestChapters(t *testing.T) {
@@ -32,6 +30,8 @@ func TestChapters(t *testing.T) {
 		// TODO: the extra 1 is wrong
 		{testName: "single chapter", s: `CHAPTER 1\nfoobar`,
 			expected: []string{TableOfContentsAnchor, `<h3 id="CHAPTER1">CHAPTER 1</h3>1<br />foobar`}},
+		{testName: "single chapter needs escaping", s: `CHAPTER 1\n<foo&bar@>`,
+			expected: []string{TableOfContentsAnchor, `<h3 id="CHAPTER1">CHAPTER 1</h3>1<br />&lt;foo&amp;bar@&gt;`}},
 		// TODO: the extra 1 and 2 are wrong
 		{testName: "two chapters", s: `CHAPTER 1\nfoobar\n\nCHAPTER 2`,
 			expected: []string{
