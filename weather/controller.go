@@ -7,14 +7,14 @@ import (
 	"net/http"
 )
 
-var WeatherTemplate = GetWeatherTemplate()
+// weatherTemplate is the handle for the singleton
+var weatherTemplate *template.Template
 
-// GetWeatherTemplate returns the parsed file as a template object
-func GetWeatherTemplate() *template.Template {
-	return template.Must(template.ParseFiles("base.tmpl", "weather/weather.html"))
+func init() {
+	weatherTemplate = template.Must(template.ParseFiles("base.tmpl", "weather/weather.html"))
 }
 
-// Controller is returns the weather for a city in the requested format
+// Controller returns the weather for a city in the requested format
 func Controller(w http.ResponseWriter, r *http.Request, apiKey string) {
 	// ?city=CA/San_Francisco
 	city := r.FormValue("city")
@@ -33,7 +33,7 @@ func Controller(w http.ResponseWriter, r *http.Request, apiKey string) {
 
 	format := r.FormValue("format")
 	if format == "html" {
-		WeatherTemplate.Execute(w, weatherForecast)
+		weatherTemplate.Execute(w, weatherForecast)
 		return
 	}
 
